@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EAMCET Mock Test</title>
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI", Arial;
+  background:#f4f7fb;
+}
+
+/* HEADER */
+.header{
+  background:#2c5aa0;
+  color:white;
+  padding:10px 20px;
+  display:flex;
+  justify-content:space-between;
+}
+
+/* SECTIONS */
+.sections{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  background:#eef3f8;
+}
+.section-btn{
+  padding:6px 14px;
+  border:none;
+  background:#e0e7ff;
+  cursor:pointer;
+}
+.section-btn.active{
+  background:#2563eb;
+  color:white;
+}
+
+/* MAIN */
+.container{
+  display:flex;
+  height:calc(100vh - 140px);
+}
+
+/* LEFT */
+.left{
+  flex:3;
+  padding:20px;
+  overflow:auto;
+  position:relative;
+
+  background-image:url('https://upload.wikimedia.org/wikipedia/commons/a/ae/Vignan_logo.png');
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:250px;
+}
+ .question-img {
+      display: block;
+      margin: 15px auto;
+      max-width: 750px;
+      width: 100%;
+    }
+
+.left::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,0.85);
+  z-index:0;
+}
+
+.left *{
+  position:relative;
+  z-index:1;
+}
+
+/* OPTIONS */
+.option{
+  padding:10px;
+  margin:8px 0;
+  border:1px solid #ccc;
+  cursor:pointer;
+  background:white;
+}
+.option.selected{
+  background:#3b82f6;
+  color:white;
+}
+
+/* RIGHT */
+.right{
+  flex:1;
+  background:#d9e6f2;
+  padding:12px;
+}
+
+/* STATUS GRID */
+.status-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px 20px;
+  margin-bottom:15px;
+}
+.status-grid div{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* HEX */
+.hex{
+  min-width:60px;
+  text-align:center;
+  padding:8px 12px;
+  color:white;
+  font-weight:bold;
+  clip-path: polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);
+}
+
+.green{background:#22c55e;}
+.red{background:#ef4444;}
+.gray{background:#d1d5db;color:black;}
+.purple{background:#7e22ce;}
+.mix{background:linear-gradient(45deg,#22c55e,#9333ea);}
+
+/* SECTION TITLE */
+.section-title{
+  background:#2c5aa0;
+  color:white;
+  padding:5px;
+  margin-top:10px;
+}
+
+/* PALETTE */
+.palette{
+  height:250px;
+  overflow-y:auto;
+}
+#nav{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+}
+.qbtn{
+  height:38px;
+  border:1px solid #aaa;
+  background:#e5e7eb;
+  cursor:pointer;
+}
+.qbtn.answered{background:#22c55e;color:white;}
+.qbtn.review{background:#9333ea;color:white;}
+.qbtn.not-answered{background:#ef4444;color:white;}
+.qbtn.mix{background:linear-gradient(45deg,#22c55e,#9333ea);color:white;}
+.qbtn.current{border:3px solid #2563eb;}
+
+/* POPUP */
+#popup{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.popup-box{
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.popup-box button{
+  display:block;
+  margin:15px auto 0;   /* centers horizontally */
+  padding:8px 20px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  background:#f1f5f9;
+  cursor:pointer;
+}
+
+/* BOTTOM BAR */
+.bottom-bar{
+  position:fixed;
+  bottom:0;
+  width:98%;
+  background:#f1f5f9;
+  border-top:1px solid #ccc;
+  padding:5px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* LEFT BUTTONS */
+.left-actions{
+  display:flex;
+  gap:10px;
+}
+
+.left-actions button{
+  padding:8px 14px;
+  border:1px solid #ccc;
+  background:#f8fafc;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* RIGHT BUTTONS */
+.right-actions{
+  display:flex;
+  gap:90px;
+}
+
+.save-next-main{
+  background:#3b82f6;
+  color:white;
+  border:none;
+  padding:10px 25px;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.submit-main{
+  background:#38bdf8;
+  color:white;
+  border:none;
+  padding:10px 50px;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.submit-main.disabled{
+  background:#9ca3af;
+  cursor:not-allowed;
+}
+</style>
+</head>
+
+<body onload="init()">
+
+<div class="header">
+  <b>AP EAMCET Mock Test</b>
+  <span id="timer">03:00:00</span>
+</div>
+
+<div class="sections">
+  <button class="section-btn active" onclick="changeSection('physics',this)">Physics</button>
+  <button class="section-btn" onclick="changeSection('chemistry',this)">Chemistry</button>
+  <button class="section-btn" onclick="changeSection('maths',this)">Maths</button>
+</div>
+
+<div class="container">
+
+<div class="left">
+  <div id="question"></div>
+  <div id="options"></div>
+</div>
+
+<div class="right">
+
+  <div class="status-grid">
+    <div><span class="hex green" id="ans">0</span> Answered</div>
+    <div><span class="hex red" id="notAnswered">0</span> Not Answered</div>
+    <div><span class="hex gray" id="notVisited">0</span> Not Visited</div>
+    <div><span class="hex purple" id="rev">0</span> Review</div>
+    <div><span class="hex mix" id="mixCount">0</span> Ans+Review</div>
+  </div>
+
+  <div class="section-title" id="sectionTitle">Section : PHYSICS</div>
+
+  <div class="palette">
+    <div id="nav"></div>
+  </div>
+
+</div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+
+  <div class="left-actions">
+    <button onclick="saveMarkNext()">Marked for Review & Next</button>
+    <button onclick="markReview()">Save & Mark For Review</button>
+    <button onclick="clearResponse()">Clear</button>
+  </div>
+
+  <div class="right-actions">
+    <button onclick="saveNext()" class="save-next-main">Save & Next</button>
+    <button id="submitBtn" class="submit-main disabled" disabled>Submit</button>
+  </div>
+
+</div>
+
+<!-- POPUP -->
+<div id="popup">
+  <div class="popup-box">
+    <h2>✅ Test Submitted</h2>
+    <button onclick="goNext()">Next</button>
+  </div>
+</div>
+
+<script>
+
+let current=0,currentSection="physics";
+let examEnded=false;
+
+let questions = {
+
+physics: [
+
+{
+  q:"One million electrons are added to a glass rod. Total charge is",
+  options:["10⁻¹³ C","-1.6×10⁻¹³ C","1.6×10⁻¹² C","10⁻¹² C"]
+},
+{
+  q:"A body has a charge of 9.6×10⁻²⁰ C. It is",
+  options:["Possible","Not possible","May or may not be possible","Data not sufficient"]
+},
+{
+  q:"A force of 4N acts between two charges in air. If εr = 8, new force is",
+  options:["1 N","0.5 N","2 N","4 N"]
+},
+{
+  q:"Three charges –q, +q and –q are at corners of triangle. Force at centroid is",
+  options:["3q²/(4πϵ₀a²)","q²/(4πϵ₀a²)","2q²/(4πϵ₀a²)","3q²/(2πϵ₀a²)"]
+},
+  {
+  q:"Two small conducting spheres each of mass 9×10⁻⁴ kg are suspended from the same point by non-conducting strings of length 100 cm. They are given equal and similar charges until the strings are equally inclined at each to the vertical. The charge on sphere is ____ coulomb",
+  options:[
+    "1.4×10⁻⁶",
+    "1.6×10⁻⁶",
+    "2×10⁻⁶",
+    "1.96×10⁻⁶"
+  ]
+},
+{
+  q:"Two charges of 50 μC and 100 μC are separated by a distance of 0.6 m. The intensity of electric field at a point midway between them is ___",
+  options:[
+    "5",
+    "2",
+    "3",
+    "4"
+  ]
+},
+{
+  q:"Two point charges Q and 3Q are placed some distance apart. If the electric field at the location of Q is E, the field at the location of –3Q is",
+  options:[
+    "E",
+    "-E",
+    "3E",
+    "-3E"
+  ]
+},
+{
+  q:"Two identical metal spheres possess +60C and –20C charges. They are brought in contact and then separated by 10 cm. The force between them is ____ ×10¹³ N",
+  options:[
+    "36",
+    "26",
+    "32",
+    "46"
+  ]
+},
+{
+  q:"A charge of +2 μC is placed at x = 0 and a charge of –32 μC at x = 60 cm. A third charge –Q is placed on the x-axis such that it experiences no force. The distance of the point from +2 μC is (in cm)",
+  options:[
+    "-20",
+    "20",
+    "30",
+    "-30"
+  ]
+},
+{
+  q:"A mass m carrying a charge q is suspended from a string and placed in a uniform horizontal electric field of intensity E. The angle made by the string with the vertical in equilibrium is",
+  options:[
+    "tan⁻¹(mg/Eq)",
+    "tan⁻¹(m/Eq)",
+    "tan⁻¹(Eq/m)",
+    "tan⁻¹(Eq/mg)"
+  ]
+},{
+  q:"A proton of mass m and charge e is released from rest in a uniform electric field of strength E. The time taken to travel a distance d is",
+  options:[
+    "√(2de/mE)",
+    "√(2dm/Ee)",
+    "√(2dE/me)",
+    "√(2Ee/dm)"
+  ]
+},
+{
+  q:"The dipole moment of the given system is",
+  img:"images/q12.png",
+  options:[
+    "3ql along perpendicular bisector of q-q line",
+    "2ql along perpendicular bisector of q-q line",
+    "ql² along perpendicular bisector of q-q line",
+    "0"
+  ]
+},{
+  q:"Two equal and opposite charges q separated by distance 2a. The electric field at a point on the perpendicular bisector at a large distance r is",
+  options:[
+    "qa/(4πϵ₀r²)",
+    "2qa/(4πϵ₀r³)",
+    "2qa/(4πϵ₀r²)",
+    "qa/(4πϵ₀r³)"
+  ]
+},
+{
+  q:"An electric dipole is in a uniform electric field. If work done to rotate it by 60° is 2×10⁻¹⁹ J, then work done to rotate it by another 30° is",
+  options:[
+    "2.5×10⁻¹⁹ J",
+    "2×10⁻¹⁹ J",
+    "4×10⁻¹⁹ J",
+    "2×10⁻¹⁶ J"
+  ]
+},
+{
+  q:"An electric dipole with charges 1 μC separated by 2 cm is placed in an electric field of 5×10⁵ V/m. The maximum torque is",
+  options:[
+    "10⁻³ Nm",
+    "2×10⁻³ Nm",
+    "3×10⁻³ Nm",
+    "4×10⁻³ Nm"
+  ]
+},
+{
+  q:"A charge of 5 C is placed at the centre of a spherical Gaussian surface of radius 5 cm. The electric flux through the surface is (1/ϵ₀) times",
+  options:[
+    "0.1 N·m²/C",
+    "0.5 N·m²/C",
+    "1 N·m²/C",
+    "5 N·m²/C"
+  ]
+},
+{
+  q:"The inward and outward electric flux for a closed surface are 8×10³ and 4×10³ (N·m²/C). The total charge inside the surface is",
+  options:[
+    "4×10³",
+    "-4×10³",
+    "πR²E",
+    "-4×10³ ϵ₀"
+  ]
+},
+{
+  q:"Electric field E = (5i + 2j) N/C. The electric flux through an area 2 m² in YZ plane is",
+  options:[
+    "10",
+    "20",
+    "10√2",
+    "2√29"
+  ]
+},
+{
+  q:"A cylinder of radius R and length L is placed in uniform electric field E perpendicular to axis. Total flux through curved surface is",
+  options:[
+    "2πRE",
+    "πR²E",
+    "0",
+    "2πERL"
+  ]
+},
+{
+  q:"An infinite long wire has linear charge density 1/3 C/m. Electric field at 18 cm is",
+  options:[
+    "0.33×10¹¹ N/C",
+    "3×10¹¹ N/C",
+    "0.66×10¹¹ N/C",
+    "1.32×10¹¹ N/C"
+  ]
+},
+{
+  q:"Due to motion of a charge, its magnitude",
+  options:[
+    "Changes",
+    "Does not change",
+    "Depends on speed",
+    "Cannot be predicted"
+  ]
+},
+{
+  q:"Two charges are placed at a distance apart. If a glass slab is placed between them, force between them will",
+  options:[
+    "be zero",
+    "increase",
+    "decrease",
+    "remains the same"
+  ]
+},
+{
+  q:"Two identical +ve charges are at the ends of a straight line AB. Another identical +ve charge is placed at “C” such that AB = BC. A, B and C being on the same line. Now the force on ‘A’",
+  options:[
+    "increases",
+    "decreases",
+    "remains same",
+    "we cannot say"
+  ]
+},
+{
+  q:"The bob of a pendulum is positively charged. Another identical charge is placed at the point of suspension of the pendulum. The time period of pendulum",
+  options:[
+    "increases",
+    "decreases",
+    "becomes zero",
+    "remains same"
+  ]
+},
+{
+  q:"A cube of side b has charge q at each of its vertices. The electric field at the centre of the cube will be",
+  options:[
+    "zero",
+    "32q/b²",
+    "2q/b²",
+    "q/b²"
+  ]
+},
+{
+  q:"Dimensions of ε₀ are",
+  options:[
+    "M⁻¹L⁻³T⁴A²",
+    "ML³T⁻³A⁻¹",
+    "M⁻¹L³T³A⁻²",
+    "M⁻¹L³T²A⁻²"
+  ]
+},
+{
+  q:`A ring with a uniform charge Q and radius R, is placed in the yz plane with its centre at the origin
+
+a) The field at the origin is zero  
+b) The potential at the origin is Q kR  
+c) The filed at the point (x, 0, 0) is 2Q k x  
+d) The field at the point (x, 0, 0) is kQ/(R² + x²)
+
+Choose the correct answer`,
+  options:[
+    "a and b are true",
+    "c is true",
+    "a, b, c are true",
+    "a, b, c, d are true"
+  ]
+},
+{
+  q:"A dielectric slab of thickness d is inserted in a parallel plate capacitor whose negative plate is at x = 3d. The slab is equidistant from the plates. The capacitor is given some charge. As x goes from 0 to 3d:",
+  options:[
+    "The magnitude of the electric field remains the same",
+    "The direction of the electric field remains the same",
+    "The electric potential increases continuously",
+    "The electric potential decreases at first, then increases and again decreases"
+  ]
+},
+{
+  q:"Intensity of electric field inside a uniformly charged hollow sphere is",
+  options:[
+    "zero",
+    "non zero constant",
+    "change with r",
+    "inversely proportional to r"
+  ]
+},
+{
+  q:"A hemispherical shell is uniformly charged positively. The electric field at a point on a diameter (axis of symmetry) away from the centre is directed",
+  options:[
+    "perpendicular to the diameter",
+    "parallel to the diameter",
+    "at an angle tilted towards the centre",
+    "at an angle tilted away from the centre"
+  ]
+},
+{
+  q:"An electron and proton are sent into an electric field. The ratio of force experienced by them is",
+  options:[
+    "1 : 1",
+    "1 : 1840",
+    "1840 : 1",
+    "1 : 9.11"
+  ]
+},
+{
+  q:"An electron enters an electric field with its velocity in the direction of the electric lines of force. Then",
+  options:[
+    "The path of the electron will be a circle",
+    "The path of the electron will be a parabola",
+    "The velocity of the electron will decrease",
+    "The velcoity of the electron will increase"
+  ]
+},
+{
+  q:"An electron and proton are placed in an electric field. The forces acting on them are F1 and F2 and their accelerations are a1 and a2 respectively then",
+  options:[
+    "F1 = F2",
+    "F1 + F2 = 0",
+    "a1 = a2",
+    "a1 ≥ a2"
+  ]
+},
+{
+  q:"An electron moves with a velocity v in an electric field E. If the angle between v and E is neither 0 nor π then path followed by the electron is",
+  options:[
+    "Straight line",
+    "Circle",
+    "Ellipse",
+    "Parabola"
+  ]
+},
+{
+  q:"Debye is the unit of",
+  options:[
+    "Electric flux",
+    "Electric dipolemoment",
+    "Electric potential",
+    "Electric field intensity"
+  ]
+},
+{
+  q:"The electric field at a point at a distance r from an electric dipole is proportional to",
+  options:[
+    "1/r",
+    "1/r²",
+    "1/r³",
+    "r²"
+  ]
+},
+{
+  q:"An electric dipole when placed in a uniform electric field will have minimum potential energy, if the angle between dipole moment and electric field is",
+  options:[
+    "zero",
+    "π/2",
+    "π",
+    "3π/2"
+  ]
+},
+{
+  q:"The angle between electric dipolemoment p and the electric field E when the dipole is in stable equilibrium",
+  options:[
+    "0",
+    "π/4",
+    "π/2",
+    "π"
+  ]
+},
+{
+  q:"An electric dipole placed with its axis in the direction of a uniform electric field experiences",
+  options:[
+    "A force but not torque",
+    "A torque but no force",
+    "A force as well as a torque",
+    "Neither a force nor a torque"
+  ]
+},
+{
+  q:"If the flux of the electric field through a closed surface is zero",
+  options:[
+    "The electric field must be zero every where on the surface",
+    "The electric field must not be zero everywhere on the surface",
+    "The charge inside the surface must be zero",
+    "The charge in the vicinity of the surface must be zero"
+  ]
+}
+],chemistry: [
+
+ {
+  q:"The most abundant transition metal in earth crust is:",
+  options:[
+    "Zn",
+    "Fe",
+    "Hg",
+    "Au"
+  ]
+},
+{
+  q:"In the following pair of d-block elements, the first member is a liquid at room temperature and the second member mostly available in the earth’s crust. The pair is",
+  options:[
+    "Hg, Fe",
+    "Hg, Tc",
+    "Hg, Zn",
+    "Hg, Au"
+  ]
+},{
+  q:"The electronic configuration of Cu(II) is 3d9, whereas that of Cu(I) is 3d10. Which of the following is correct?",
+  options:[
+    "Cu(II) is more stable",
+    "Cu(II) is less stable",
+    "Cu(I) and Cu(II) are equally stable",
+    "Stability of Cu(I) and Cu(II) depends on nature of copper salts"
+  ]
+},
+{
+  q:"Element with atomic number 111 might, belong to the following group",
+  options:[
+    "Chromium",
+    "Scandium",
+    "Copper",
+    "Titanium"
+  ]
+},
+{
+  q:"The following belongs to d-block but it is not a transition element",
+  options:[
+    "Mn",
+    "Fe",
+    "Zn",
+    "Cr"
+  ]
+},
+{
+  q:"In which of the following compound Mn shows maximum radius?",
+  options:[
+    "MnO2",
+    "KMnO4",
+    "MnO",
+    "K2[Mn(CN)6]"
+  ]
+},
+{
+  q:"Transition element which exhibits typical metal (complex) structure",
+  options:[
+    "Mn",
+    "Co",
+    "Ni",
+    "Cu"
+  ]
+},
+{
+  q:"Oxide of metal cation which is not amphoteric",
+  options:[
+    "Al3+",
+    "Cr3+",
+    "Fe3+",
+    "Zn2+"
+  ]
+},
+{
+  q:"Wrongly statement regarding transition metals among the following is",
+  options:[
+    "4s electrons penetrates towards the nucleus more than 3d electrons",
+    "Atomic radii of transition metals increase rapidly with increase in atomic number because of poor shielding of nuclear attraction by (n – 1) d electrons",
+    "second and third transition series elements have nearly the same size",
+    "their densities are higher and densities of the 5d series elements are higher than those of 4d series elements"
+  ]
+},
+{
+  q:"Which of the following statements is incorrect?",
+  options:[
+    "Mercurous ion exist as Hg+",
+    "Mercurous ion is diamagnetic and exist as dimer Hg2²+",
+    "Mercurous ion is colourless",
+    "There is a covalent bond between two Hg+ ions"
+  ]
+},
+{
+  q:"Transition elements show generally positive oxidation state due to",
+  options:[
+    "Large atomic size",
+    "Low ionization energy",
+    "Low electronegativity",
+    "High electronegativity"
+  ]
+},
+{
+  q:"The maximum oxidation state of ruthenium",
+  options:[
+    "+6",
+    "+7",
+    "+8",
+    "+5"
+  ]
+},
+{
+  q:"Select the correct order of oxidising power in acidic medium",
+  options:[
+    "VO²+ < Cr2O7²- < MnO4-",
+    "VO²+ < MnO4- < Cr2O7²-",
+    "MnO4- < Cr2O7²- < VO²+",
+    "Cr2O7²- < VO²+ < MnO4-"
+  ]
+},
+{
+  q:"The compound in which nickel has the lower oxidation state is :",
+  options:[
+    "Ni(CO)4",
+    "(CH3COO)2Ni",
+    "NiO",
+    "[NiCl2(PPh3)2]"
+  ]
+},
+{
+  q:"Which metal in the transition metals exhibits +1 oxidation state most frequently?",
+  options:[
+    "Cr",
+    "Cu",
+    "Co",
+    "Ni"
+  ]
+},
+{
+  q:`Match the given in column I with the oxidation states given in column II
+
+Column I                          Column II  
+(i) Oxidation state of Mn in MnO₂ is        (a) 2  
+(ii) Most stable oxidation state of Mn is   (b) +3  
+(iii) Most stable oxidation state of Mn in oxides is   (c) +4  
+(iv) Characteristic oxidation state of Lanthanoids is  (d) +5  
+                                                     (e) +7`,
+  options:[
+    "i – c; ii – a; iii – e; iv – b",
+    "i – c; ii – a; iii – b; iv – e",
+    "i – a; ii – c; iii – b; iv – e",
+    "i – c; ii – c; iii – b; iv – a"
+  ]
+},{
+  q:"The stable oxidation states of Mn are",
+  options:[
+    "+2, +3",
+    "+2, +7",
+    "+3, +7",
+    "+3, +5"
+  ]
+},
+{
+  q:"The highest Manganese fluoride is",
+  options:[
+    "MnF4",
+    "MnF7",
+    "MnF3",
+    "MnF2"
+  ]
+},
+{
+  q:"Ferrates are formed in alkaline medium but they readily decompose to Fe2O3 and O2. Then oxidation state of iron in ferrates is",
+  options:[
+    "+8/3",
+    "+3/8",
+    "+6",
+    "+2"
+  ]
+},
+{
+  q:"Which one of the following is least stable?",
+  options:[
+    "VF2",
+    "VCl2",
+    "VBr2",
+    "VI2"
+  ]
+},
+{
+  q:"Ferrates [FeO4]2–, are formed in alkaline media but they readily decomposes to",
+  options:[
+    "Fe2O3 and O2",
+    "FeO and Fe2O3",
+    "Fe2O3 and Fe3O4",
+    "FeO and O2"
+  ]
+},
+{
+  q:"Which one of the following does not exist?",
+  options:[
+    "ScO",
+    "CrO",
+    "MnO",
+    "NiO"
+  ]
+},
+{
+  q:"The E0 value for the Mn3+ / Mn2+ couple much more positive than that for Cr3+ / Cr2+ or Fe3+ / Fe2+. The reason is",
+  options:[
+    "Much larger third ionisation energy of Mn",
+    "Much smaller third ionisation energy of Mn",
+    "Mn3+ is most stable",
+    "Very low enthalpy of atomization value of Mn among the 3d series elements"
+  ]
+},
+{
+  q:"For M3+/M2+ system, the E0 values for some metals are given. Then the relative stabilities of Fe3+, Cr3+ and Mn3+ is",
+  options:[
+    "Mn3+ < Fe3+ < Cr3+",
+    "Fe3+ < Mn3+ < Cr3+",
+    "Cr3+ < Fe3+ < Mn3+",
+    "Fe3+ < Cr3+ < Mn3+"
+  ]
+},
+{
+  q:"Which one of the transition metal ions have no unpaired electrons",
+  options:[
+    "Ti+4",
+    "V+4",
+    "V+3",
+    "Cr3+"
+  ]
+},
+{
+  q:"The magnetic moment of an ion in its +3 oxidation state is 3.85 BM. The number of unpaired electrons present in the ion is",
+  options:[
+    "1",
+    "4",
+    "3",
+    "5"
+  ]
+},
+{
+  q:"Transition metals are often paramagnetic owing to",
+  options:[
+    "high melting point and boiling point",
+    "the presence of vacant orbitals",
+    "the presence of unpaired electrons",
+    "malleability and ductility"
+  ]
+},{
+  q:`Match the following.
+
+Set – I              Set – II  
+A) Ferromagnetism    1) 9.273 x 10–24 J.Tesla–1  
+B) Paramagnetism     2) Fe, Co, Ni  
+C) Diamagnetism      3) Cr2+, Fe3+, Mn2+  
+D) Bohr Magneton     4) Zn+2, Cu+, Sc+3  
+
+The correct matching is`,
+  options:[
+    "A B C D → 4 2 3 1",
+    "A B C D → 2 3 4 1",
+    "A B C D → 1 2 3 4",
+    "A B C D → 3 1 2 4"
+  ]
+},
+{
+  q:`Match the following.
+
+Set – I        Set – II  
+A) Sc3+        1) 5.92 B.M  
+B) V2+         2) 1.73 B.M  
+C) Fe3+        3) Zero  
+D) Cu2+        4) 3.87 B.M  
+
+The correct matching is`,
+  options:[
+    "A B C D → 3 4 1 2",
+    "A B C D → 4 1 2 3",
+    "A B C D → 3 4 2 1",
+    "A B C D → 2 1 3 4"
+  ]
+},
+{
+  q:"Which of the following is a correct statement",
+  options:[
+    "Aqueous solutions of Cu+ colourless Zn+2 are colourless",
+    "Aqueous solutions of Cu+2 and Zn+2 are colourless",
+    "Aqueous solutions of Fe+3 is green in colour",
+    "Aqueous solutions of MnO4- is colourless"
+  ]
+},
+{
+  q:"Which of the following set of elements does not belongs to transitional elements?",
+  options:[
+    "Fe, Co, Ni",
+    "Cu, Ag, Au",
+    "Ti, Zr, Hf",
+    "Ga, In, Tl"
+  ]
+},
+{
+  q:"Which of the following pairs of elements have same radii ?",
+  options:[
+    "Zr, Hf",
+    "Sc, Y",
+    "La, Ac",
+    "Zn, Cd"
+  ]
+},
+{
+  q:"Which one of the following pairs of ions have the same electronic configuration?",
+  options:[
+    "Cr+3, Fe+3",
+    "Fe+3, Mn+2",
+    "Fe+3, Co+3",
+    "Sc+3, Cr+3"
+  ]
+},
+{
+  q:"The maximum and minimum melting points of first and second transition series respectively are observed with",
+  options:[
+    "Cr and Zn",
+    "Cr and Hg",
+    "V and Cd",
+    "Cr and Cd"
+  ]
+},
+{
+  q:"The pair that has the greatest malleability and ductility property is",
+  options:[
+    "Na, K",
+    "Pb, Sn",
+    "Zn, Mn",
+    "Cu, Au"
+  ]
+},
+{
+  q:"The following does not show variable valency",
+  options:[
+    "Mn",
+    "Fe",
+    "Zn",
+    "Cr"
+  ]
+},
+{
+  q:"Each of the following ion contains vanadium the +5 oxidation sate except",
+  options:[
+    "VO2+",
+    "VOH4+",
+    "VO2+",
+    "[VO3OH]2–"
+  ]
+},
+{
+  q:"Which of the following is not an amphoteric oxide?",
+  options:[
+    "HgO",
+    "PbO2",
+    "ZnO",
+    "SnO2"
+  ]
+},
+{
+  q:"Which oxide of Mn is more acidic in nature?",
+  options:[
+    "MnO",
+    "Mn2O7",
+    "Mn2O3",
+    "MnO2"
+  ]
+},
+{
+  q:"The ion having maximum magnetic moment is",
+  options:[
+    "Co+3",
+    "Cr+3",
+    "Ni+2",
+    "Cu+1"
+  ]
+}
+],
+maths: [
+{
+  q:"Let f(x) = ax² + bx + c, where a, b, c are rational and f: Z → Z where Z is the set of integers. Then a + b is",
+  options:[
+    "A negative integer",
+    "An integer",
+    "Non integral rational number",
+    "Real number"
+  ]
+},
+{
+  q:"The graph of identity function is",
+  options:[
+    "Straight line passing through origin",
+    "Symmetric about y-axis",
+    "Parallel to x-axis",
+    "Parallel to y-axis"
+  ]
+},
+{
+  q:"If f(x) = x² + λx + μ be an integral function of the integral variable x then",
+  options:[
+    "λ is an integer and μ is a rational fraction",
+    "λ and μ are integers",
+    "μ is an integer and λ is a rational fraction",
+    "λ and μ are rational fractions"
+  ]
+},
+{
+  q:"f: A → B is a function then A, B are respectively",
+  options:[
+    "Domain, range",
+    "Domain, co domain",
+    "Co domain, range",
+    "Range, domain"
+  ]
+},
+{
+  q:"f: A → B then f(A) is called",
+  options:[
+    "Domain",
+    "Co domain",
+    "Range",
+    "Function"
+  ]
+},
+{
+  q:"If f and g are functions such that fog is one-one then",
+  options:[
+    "g must be onto",
+    "g must be one-one",
+    "f must be one-one",
+    "f, g need not one-one"
+  ]
+},
+{
+  q:"If f: A → B is surjective then",
+  options:[
+    "No two elements of A have the same image in B",
+    "Every element in A has an image in B",
+    "Every element of B has at least one preimage in A",
+    "A and B are finite non empty sets"
+  ]
+},
+{
+  q:"If f: A → B is a constant function which is onto then B is",
+  options:[
+    "A single ton set",
+    "A null set",
+    "An infinite set",
+    "A finite set"
+  ]
+},
+{
+  q:"To have inverse for the function f, f should be",
+  options:[
+    "one-one",
+    "onto",
+    "one-one and onto",
+    "Identify function"
+  ]
+},
+{
+  q:"If n ≥ 2 then the number of surjections that can be defined from {1, 2, 3, …. n} onto {1, 2} is",
+  options:[
+    "n² – n",
+    "n²",
+    "2ⁿ",
+    "2ⁿ – 2"
+  ]
+},
+{
+  q:"Let f : {(1, 1), (2, 3), (0, -1), (-1, -3)} be a function from Z to Z defined by f(x) = ax + b, for some integers a, b then (a, b) =",
+  options:[
+    "(-1, 2)",
+    "(2, -1)",
+    "(3, -2)",
+    "(0, 3)"
+  ]
+},
+{
+  q:"If f(x) is defined as given, then k =",
+  options:[
+    "0.5",
+    "0.05",
+    "0.15",
+    "0.25"
+  ]
+},
+{
+  q:"If f(x) = 7^(1+lnx) / x^(ln7) then f(2018) =",
+  options:[
+    "20",
+    "7",
+    "2018",
+    "100"
+  ]
+},
+{
+  q:"If (cos²x + sin⁴x) / (sin²x + cos⁴x) = f(x) for x ∈ R then f(2018) =",
+  options:[
+    "2",
+    "1",
+    "4",
+    "3"
+  ]
+},
+{
+  q:"If f = {(-2,4), (0,6), (2,8)} and g = {(-2,-1), (0,3), (2,5)}, then ( (2f/3g) + (3g/2f) )(0) =",
+  options:[
+    "2.8",
+    "1.8",
+    "2.08",
+    "2"
+  ]
+},
+{
+  q:"f(1)=1, n ≥ 1 ⇒ f(n+1)=2f(n)+1 then f(n) =",
+  options:[
+    "2^(n+1)",
+    "2^n",
+    "2^n − 1",
+    "2^(n−1) − 1"
+  ]
+},
+{
+  q:"If f(x) = sin(log x) then (f(xy) + f(x/y))/2f(x)cos(log y) =",
+  options:[
+    "cos(log x)",
+    "sin(log y)",
+    "cos(log xy)",
+    "0"
+  ]
+},
+{
+  q:"If f(x,y) = x + y − xy then the arithmetic mean of f(x,y) and f(y,x) is",
+  options:[
+    "x",
+    "y",
+    "0",
+    "xy"
+  ]
+},{
+  q:"The equivalent function of 2 logx is",
+  options:[
+    "2logx",
+    "2log |x|",
+    "|logx|^2",
+    "(logx)²"
+  ]
+},
+{
+  q:"The domain of (x² + 2x + 1)/(x² − x − 6) is",
+  options:[
+    "R – {3, –2}",
+    "R – {–3, 2}",
+    "R – {3, –2}",
+    "R – (3, –2)"
+  ]
+},
+{
+  q:"The domain of √(x − 2) + 1/log(4 − x) is",
+  options:[
+    "[2, ∞)",
+    "(−∞, 4)",
+    "[2, 3) ∪ (3, 4)",
+    "[3, ∞)"
+  ]
+},
+{
+  q:"The domain of (3^x + 3^(-x))/(3^x − 3^(-x)) is",
+  options:[
+    "(−∞, ∞)",
+    "(−∞, 0) ∪ (0, ∞)",
+    "(0, ∞)",
+    "(0, 1)"
+  ]
+},
+{
+  q:"The domain of 1/([x] − x) is",
+  options:[
+    "R",
+    "Z",
+    "R – Z",
+    "Q – {0}"
+  ]
+},
+{
+  q:"The domain of e^(√x) + cos x is",
+  options:[
+    "(−∞, ∞)",
+    "[0, ∞)",
+    "(0, 1)",
+    "(1, ∞)"
+  ]
+},
+{
+  q:"The domain of 1/√([x]² − 7[x] + 10) is",
+  options:[
+    "(−∞, 2) ∪ [6, ∞)",
+    "(−∞, 2] ∪ [6, ∞)",
+    "(−∞, 2) ∪ (6, ∞)",
+    "(−∞, 2) ∪ (5, ∞)"
+  ]
+},
+{
+  q:"The domain of log(x+3)/(x² + 3x + 2) is",
+  options:[
+    "R",
+    "[0, ∞)",
+    "(−3, ∞)",
+    "(−3, ∞) – {−1, −2}"
+  ]
+},
+{
+  q:"For which domain, the functions f(x)=2x² − 1 and g(x)=1 − 3x are equal to",
+  options:[
+    "R",
+    "{1/2, −2}",
+    "(1/2, 2)",
+    "[1/2, 2]"
+  ]
+},
+{
+  q:"The range of (x² − x + 1)/(x² + x + 1) is",
+  options:[
+    "[1/3, 3]",
+    "[1/2, 2]",
+    "[0, 1]",
+    "[-1, 1]"
+  ]
+},
+{
+  q:"Range of f(x) = 1/(1 + 2cos x) is",
+  options:[
+    "[1/3, 1]",
+    "[-1, 1/3]",
+    "(-∞, -1] ∪ [1/3, ∞)",
+    "[-1, 1/3]"
+  ]
+},
+{
+  q:"The range of f(x) = x² + x + 1 is",
+  options:[
+    "[3/4, ∞)",
+    "[0, ∞)",
+    "[1, ∞)",
+    "[1/4, ∞)"
+  ]
+},
+{
+  q:"The domain and range of the function given by f(x) = x² − 5 is",
+  options:[
+    "Domain = R+, Range = (−∞,1]",
+    "Domain = R, Range = (−∞,2]",
+    "Domain = R, Range = (−∞,2)",
+    "Domain = R+, Range = (−∞,2]"
+  ]
+},
+{
+  q:"Range of the function f(x) = [x] − x is",
+  options:[
+    "R",
+    "{1}",
+    "{0}",
+    "(0, ∞)"
+  ]
+},
+{
+  q:"Let A = {9, 10, 11, 12, 13} and f : A → N be defined by f(n) = highest prime factor of n, then its range is",
+  options:[
+    "{13}",
+    "{3, 5, 11, 13}",
+    "{11, 13}",
+    "{2, 3, 5, 11}"
+  ]
+},
+{
+  q:"If A = (3, 81) and f : A → B is a surjection defined by f(x) = log₃x then B =",
+  options:[
+    "[1, 4]",
+    "(1, 4]",
+    "(1, 4)",
+    "[1, ∞)"
+  ]
+},
+{
+  q:"f : N → A where A = {0,1} defined by f(x) = 0 if x is odd, 1 if x is even. Then f is",
+  options:[
+    "one-one, onto",
+    "one-one, into",
+    "many-one, onto",
+    "many-one, into"
+  ]
+},
+{
+  q:"f : (−∞,∞) → (0,1] defined by f(x) = 1/(1 + x²) is",
+  options:[
+    "one-one but not onto",
+    "onto but not one-one",
+    "bijective",
+    "neither one-one nor onto"
+  ]
+},
+{
+  q:"f : R → R defined by f(x) = x² + 1 is",
+  options:[
+    "one-one",
+    "onto",
+    "bijective",
+    "neither one-one nor onto"
+  ]
+},
+{
+  q:"The function f : R → R defined by f(x) = x⁴ + x⁴ is",
+  options:[
+    "one-one and into",
+    "many-one and into",
+    "one-one and onto",
+    "many-one and onto"
+  ]
+},
+{
+  q:"The number of linear functions which map [−1,1] to [0,2] are",
+  options:[
+    "One",
+    "Two",
+    "Four",
+    "Three"
+  ]
+},
+{
+  q:"If A = {1, 8, 11, 14, 25} then the condition to define a surjection from A to B is",
+  options:[
+    "n(A) + n(B) = 20",
+    "n(A) < n(B)",
+    "n(B) ≤ 5",
+    "n(B) = 10"
+  ]
+},
+{
+  q:"|x| is continuous at",
+  options:[
+    "every where of x",
+    "x = 0 only",
+    "(1, ∞) only",
+    "(−∞, 1) only"
+  ]
+},
+{
+  q:"[x] is continuous at",
+  options:[
+    "R – Z",
+    "Z",
+    "N",
+    "W"
+  ]
+},
+{
+  q:"sgn(x) is discontinuous at",
+  options:[
+    "every where of x",
+    "x = 0",
+    "(1, ∞)",
+    "(−∞, 1)"
+  ]
+},
+{
+  q:"{x} is discontinuous at (here { } is a fractional part function)",
+  options:[
+    "every where of x",
+    "Z",
+    "N",
+    "R – Z"
+  ]
+},
+{
+  q:"f(x) = x + |x| is continuous at",
+  options:[
+    "0 only",
+    "0, 1 only",
+    "every where",
+    "no where"
+  ]
+},
+{
+  q:"f(x) = min{x², x}, x ∈ R then f(x) is",
+  options:[
+    "discontinuous at 0",
+    "discontinuous at 1",
+    "continuous on R",
+    "continuous at 0, 1"
+  ]
+},
+{
+  q:"Which of the following functions is continuous at x = 0 ?",
+  options:[
+    "e^(1/x), x ≠ 0; f(0)=1",
+    "e^(-1/x), x ≠ 0; f(0)=1",
+    "f(x)=1 for x≤0; f(x)=x² for x>0",
+    "x·e^(-1/x), x ≠ 0; f(0)=1"
+  ]
+},
+{
+  q:"f(x) = [x] + 1/x is discontinuous in set S where S is",
+  options:[
+    "(-∞,1] ∪ integers",
+    "all real",
+    "all positive rational",
+    "all negative rational"
+  ]
+},
+{
+  q:"If f(x)= -1 for x<0, 0 for x=0, 1 for x>0 and g(x)=sinx+cosx then points of discontinuity of fog(x) in (0,2π) are",
+  options:[
+    "π/4 , 5π/4",
+    "π/4 , 3π/4",
+    "π/4 , 7π/4",
+    "3π/4 , 7π/4"
+  ]
+},
+{
+  q:"1/sin x is discontinuous at x =",
+  options:[
+    "0",
+    "π/2",
+    "π/4",
+    "3π"
+  ]
+},
+{
+  q:"The function f(x) = (cos3x − cos4x)/x² for x≠0 and f(0)=7/2 at x=0 is",
+  options:[
+    "continuous",
+    "discontinuous",
+    "left continuous",
+    "right continuous"
+  ]
+},
+{
+  q:"The function f(x) = sinx/x for x≠0 and f(0)=0 at x=0 is",
+  options:[
+    "continuous",
+    "right continuous",
+    "left continuous",
+    "cannot be determined"
+  ]
+},
+{
+  q:"If f(x)=e^(−x²)cosx / x² for x≠0 is continuous at x=0 then f(0)=",
+  options:[
+    "1/2",
+    "3/2",
+    "2",
+    "1/3"
+  ]
+},
+{
+  q:"The value of f(0) so that f(x) = [log(1+x/a) − log(1−x/b)]/x for x≠0 is continuous at x=0 is",
+  options:[
+    "(a+b)/ab",
+    "(a−b)/ab",
+    "ab/(a+b)",
+    "ab/(a−b)"
+  ]
+},
+{
+   q:"",
+  img:"images/q155.png",
+  options:[
+    "4",
+    "2",
+    "1",
+    "1/4"
+  ]
+},
+
+{
+   q:"",
+  img:"images/q156.png",
+  options:[
+  "-1",
+    "1",
+    "0",
+    "2"
+  ]
+},
+
+{
+   q:"",
+  img:"images/q157.jpeg",
+  options:[
+ "(-2, 1)",
+    "(-2, -1)",
+    "(-1, √3)",
+    "(-2, -√3)"
+  ]
+},
+{
+   q:"",
+  img:"images/q158.jpeg",
+  options:[
+   "p = 0",
+    "p = r",
+    "p = q",
+    "p ≠ q"
+  ]
+},
+{
+   q:"",
+  img:"images/q159.jpeg",
+  options:[
+  "a = 0, b = 0",
+    "a = 1, b = 1",
+    "a = –1, b = 1",
+    "a = 1, b = –1"
+  ]
+},
+{
+   q:"",
+  img:"images/q160.jpeg",
+  options:[
+"nπ, n ∈ Z",
+    "nπ/3, n ∈ Z",
+    "nπ/2, n ∈ Z",
+    "nπ/6, n ∈ Z"
+  ]
+},
+{
+  q:"The discontinuous points of f(x) = 1/log|x| are",
+  options:[
+    "0, ±2",
+    "1, ±2",
+    "0, ±1",
+    "0, ±3"
+  ]
+},
+{
+  q:"The function f(x) = |2sgn(2x)| + 2 has",
+  options:[
+    "Jump discontinuity",
+    "Removable discontinuity",
+    "Infinite discontinuity",
+    "No discontinuity at x = 0"
+  ]
+},
+{
+  q:"f(x) = sgn(x³ − x) is discontinuous at x =",
+  options:[
+    "0",
+    "1",
+    "-1",
+    "0, -1, 1"
+  ]
+},
+{
+  q:"If f(x) = sgn(2sin x + a) is continuous for all x then the possible values of a are",
+  options:[
+    "R",
+    "a ≤ -2 or a ≥ 2",
+    "(-2, 2)",
+    "(0, ∞)"
+  ]
+},
+{
+  q:"If x^2005 + 1/(1 + sin²x) = 2005 then x ∈",
+  options:[
+    "[-1, 0]",
+    "[-2, 0]",
+    "(0, 2)",
+    "[0, 1/2]"
+  ]
+},
+{
+  q:"The function f(x) = x^(3/4) sin(3πx) − x takes the value a for x ∈ [−2,2] then a =",
+  options:[
+    "100/3",
+    "19/3",
+    "50/3",
+    "7/3"
+  ]
+},
+{
+  q:"f(x) = sin(3 log x) − log(x/2) to be continuous at x = 0, then f(0) =",
+  options:[
+    "0",
+    "2",
+    "-2",
+    "3"
+  ]
+},
+{
+  q:"If f(x) = (x−1)/(ln x) for x ≠ 1 and f is continuous at x = 1 then f(1) =",
+  options:[
+    "e",
+    "e⁻¹",
+    "e⁻²",
+    "e²"
+  ]
+},
+{
+  q:"The function f(x) = (x−a)²(x−b)² takes the value a² + b² for some value c ∈ [a,b]. For a = 3, b = 5, then f(c) =",
+  options:[
+    "3",
+    "4",
+    "5",
+    "1"
+  ]
+},
+{
+   q:"",
+  img:"images/q170.jpeg",
+  options:[
+ "2",
+    "3",
+    "5",
+    "4"
+  ]
+},
+{
+   q:"",
+  img:"images/q171.jpeg",
+  options:[
+ "70",
+    "0.75",
+    "0.79",
+    "0.78"
+  ]
+},
+{
+   q:"",
+  img:"images/q172.jpeg",
+  options:[
+ "0.67",
+    "0.68",
+    "0.69",
+    "0.65"
+  ]
+},
+{
+   q:"",
+  img:"images/q173.jpeg",
+  options:[
+  "3",
+    "4",
+    "2",
+    "5"]
+},
+{
+   q:"",
+  img:"images/q174.jpeg",
+  options:[
+    "0.60",
+    "0.50",
+    "0.70",
+    "0.80"
+
+  ]
+},
+{
+   q:"",
+  img:"images/q175.jpeg",
+  options:[
+ "R",
+    "R – {−2}",
+    "R – {−1}",
+    "R – {−1, −2}"
+
+  ]
+},
+
+{
+   q:"",
+  img:"images/q176.jpeg",
+  options:[
+  "16",
+    "2",
+    "8",
+    "4"
+
+  ]
+},{
+   q:"",
+  img:"images/q177.jpeg",
+  options:[
+  "0",
+    "-1/6",
+    "-1/24",
+    "-1/48"
+
+  ]
+},
+{
+  q:`If f(x) is a continuous function for all real x and satisfies
+x² + 3x + f(x) − f(3) = 0, ∀x ∈ R then f(3) =`,
+  options:[
+    "3",
+    "2(3 − 1)",
+    "2³ − 1",
+    "(2¹ − 3)"
+  ]
+},
+{
+  q:`If f(x) = {
+  ax² + b²cosx + sinx,   x ≤ 0
+  e^x,                   x > 0
+} is continuous at x = 0 then`,
+  options:[
+    "2 log a = b",
+    "2 log b = e",
+    "log a = 2 log b",
+    "a = b"
+  ]
+},
+{
+  q:`The function f(x) = [x] + [x+1], where [x] is greatest integer function, is continuous at x = 1 if`,
+  options:[
+    "a = 2b",
+    "a = b",
+    "a + b = 0",
+    "a + 2b = 0"
+  ]
+}
+
+
+ ]
+};
+let startIndex = {
+  physics:1,
+  chemistry:41,
+  maths:81
+};
+
+
+  
+ 
+
+let answers={physics:[],chemistry:[],maths:[]};
+let review={physics:[],chemistry:[],maths:[]};
+let visited={physics:[],chemistry:[],maths:[]};
+
+/* TIMER */
+let time=180*60;
+
+let timer=setInterval(()=>{
+ if(time<=0){
+   clearInterval(timer);
+   endExam();
+   return;
+ }
+
+ let m=Math.floor(time/60);
+ let s=time%60;
+
+ document.getElementById("timer").innerText=
+ `00:${m<10?"0":""}${m}:${s<10?"0":""}${s}`;
+
+ time--;
+},1000);
+
+/* TIME UP */
+function endExam(){
+ examEnded=true;
+ let btn=document.getElementById("submitBtn");
+ btn.classList.remove("disabled");
+ btn.disabled=false;
+ document.getElementById("popup").style.display = "flex";
+}
+
+/* SUBMIT */
+document.getElementById("submitBtn").onclick=function(){
+ if(!examEnded){
+   alert("Submit only after time up!");
+   return;
+ }
+ document.getElementById("popup").style.display="flex";
+};
+
+function goNext(){
+ alert("Go to Results Page");
+}
+
+/* INIT */
+function init(){loadQuestion();}
+
+function changeSection(sec,btn){
+ currentSection=sec;current=0;
+ document.querySelectorAll(".section-btn").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ document.getElementById("sectionTitle").innerText="Section : "+sec.toUpperCase();
+ loadQuestion();
+}
+function loadQuestion(){
+  visited[currentSection][current]=true;
+  let q=questions[currentSection][current];
+
+  let qNo = startIndex[currentSection] + current;
+
+let html = qNo + ". ";
+
+if(q.q){
+  html += q.q;
+}
+
+if(q.img){
+ html += `<br><img src="${q.img}" class="question-img">`;
+}
+
+  document.getElementById("question").innerHTML = html;
+
+  let labels = ["A", "B", "C", "D"];
+
+  let opt="";
+  q.options.forEach((o,i)=>{
+    let sel=answers[currentSection][current]===i?"selected":"";
+    opt+=`<div class="option ${sel}" onclick="select(${i})">
+            <b>${labels[i]}.</b> ${o}
+          </div>`;
+  });
+  document.getElementById("options").innerHTML=opt; loadNav();updateNav();updateStats();
+}
+
+function select(i){
+ answers[currentSection][current]=i;
+ review[currentSection][current]=false;
+ loadQuestion();
+}
+
+function clearResponse(){answers[currentSection][current]=undefined;loadQuestion();}
+function markReview(){review[currentSection][current]=true;loadQuestion();}
+function saveNext(){next();}
+function saveMarkNext(){review[currentSection][current]=true;next();}
+
+/* NAV */
+function loadNav(){
+ let nav="";
+ questions[currentSection].forEach((_,i)=>{
+nav+=`<button class="qbtn" id="q${i}" onclick="go(${i})">
+${startIndex[currentSection] + i}
+</button>`;
+ });
+ document.getElementById("nav").innerHTML=nav;
+}
+
+function updateNav(){
+ questions[currentSection].forEach((_,i)=>{
+  let btn=document.getElementById("q"+i);
+  btn.className="qbtn";
+
+  let a=answers[currentSection][i];
+  let r=review[currentSection][i];
+
+  if(a!==undefined && r) btn.classList.add("mix");
+  else if(r) btn.classList.add("review");
+  else if(a!==undefined) btn.classList.add("answered");
+  else if(visited[currentSection][i]) btn.classList.add("not-answered");
+
+  if(i===current) btn.classList.add("current");
+ });
+}
+
+function updateStats(){
+ let ans=0,rev=0,notAns=0,notVisited=0,mix=0;
+
+ questions[currentSection].forEach((_,i)=>{
+  let a=answers[currentSection][i];
+  let r=review[currentSection][i];
+
+  if(a!==undefined && r) mix++;
+  else if(r) rev++;
+  else if(a!==undefined) ans++;
+  else if(visited[currentSection][i]) notAns++;
+  else notVisited++;
+ });
+
+ document.getElementById("ans").innerText=ans;
+ document.getElementById("rev").innerText=rev;
+ document.getElementById("notAnswered").innerText=notAns;
+ document.getElementById("notVisited").innerText=notVisited;
+ document.getElementById("mixCount").innerText=mix;
+}
+
+function next(){
+ if(current<questions[currentSection].length-1){
+  current++;loadQuestion();
+ }
+}
+
+function go(i){current=i;loadQuestion();}
+
+</script>
+
+</body>
+</html>
