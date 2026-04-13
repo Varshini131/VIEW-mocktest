@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Result</title>
+</head>
+<body style="text-align:center; font-family:Arial; margin-top:100px;">
+
+<h1>🎉 Your Result</h1>
+
+<h2 id="score"></h2>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const score = params.get("score");
+  const total = params.get("total");
+
+  document.getElementById("score").innerText =
+    `Score: ${score} / ${total}`;
+</script>
+
+</body>
+</html>

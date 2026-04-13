@@ -299,7 +299,7 @@ body{
 
   <div class="right-actions">
     <button onclick="saveNext()" class="save-next-main">Save & Next</button>
-    <button id="submitBtn" class="submit-main disabled" disabled>Submit</button>
+    <button id="submitBtn" class="submit-main disabled" disabled onclick="submitTest()">Submit</button>
   </div>
 
 </div>
@@ -1811,6 +1811,7 @@ let answers={physics:[],chemistry:[],maths:[]};
 let review={physics:[],chemistry:[],maths:[]};
 let visited={physics:[],chemistry:[],maths:[]};
 
+
 /* TIMER */
 let time=180*60;
 
@@ -1958,8 +1959,33 @@ function next(){
  }
 }
 
-function go(i){current=i;loadQuestion();}
 
+function go(i){current=i;loadQuestion();}
+function submitTest() {
+
+  let finalAnswers = {};
+  let qNo = 1;
+
+  ["physics", "chemistry", "maths"].forEach(section => {
+    answers[section].forEach(ans => {
+      finalAnswers[qNo] = (ans !== undefined) ? ans + 1 : 0;
+      qNo++;
+    });
+  });
+
+  fetch("http://localhost:5000/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ answers: finalAnswers })
+  })
+  .then(res => res.json())
+  .then(data => {
+    window.location.href = `result.html?score=${data.score}&total=${data.total}`;
+  })
+  .catch(err => console.error(err));
+}
 </script>
 
 </body>
