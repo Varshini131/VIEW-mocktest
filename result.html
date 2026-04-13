@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Result Dashboard</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI, Arial;
+  background:#f4f6fb;
+  color:#111827;
+}
+
+.header{
+  background:#1e3a8a;
+  color:#fff;
+  padding:18px 24px;
+  font-size:18px;
+  font-weight:600;
+}
+
+.container{
+  max-width:1100px;
+  margin:20px auto;
+  padding:0 16px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+}
+
+.box{
+  background:#f8fafc;
+  padding:14px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.box h3{ margin:0; font-size:20px; }
+.box p{ margin:6px 0 0; color:#6b7280; font-size:13px; }
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:12px;
+  text-align:center;
+  border-bottom:1px solid #e5e7eb;
+}
+
+th{
+  background:#f1f5f9;
+}
+
+.correct{color:#16a34a;font-weight:600;}
+.incorrect{color:#dc2626;font-weight:600;}
+.skipped{color:#6b7280;font-weight:600;}
+
+.total-row{
+  background:#eef2ff;
+  font-weight:700;
+}
+
+.title{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  Exam Result Dashboard
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="title">Overall Performance</div>
+
+    <div class="summary">
+      <div class="box">
+        <h3 id="score">0</h3>
+        <p>Total Score</p>
+      </div>
+
+      <div class="box">
+        <h3 id="attempted">0</h3>
+        <p>Attempted</p>
+      </div>
+
+      <div class="box">
+        <h3 id="correct">0</h3>
+        <p>Correct</p>
+      </div>
+
+      <div class="box">
+        <h3 id="incorrect">0</h3>
+        <p>Incorrect</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="title">Subject Wise Analysis</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Total</th>
+          <th>Attempted</th>
+          <th>Correct</th>
+          <th>Incorrect</th>
+          <th>Skipped</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+/* ======================
+   GET DATA
+====================== */
+const resultData = JSON.parse(localStorage.getItem("examResult"));
+
+if (!resultData) {
+  alert("No result found!");
+  window.location.href = "exam.html";
+}
+
+/* SUBJECTS */
+const subjects = ["physics","chemistry","maths"];
+
+/* TOTALS */
+let totalScore = 0;
+let totalCorrect = 0;
+let totalIncorrect = 0;
+let totalAttempted = 0;
+let totalQuestions = 0;
+
+let tableHTML = "";
+
+/* LOOP SUBJECTS */
+subjects.forEach(sub => {
+
+  let answers = resultData.answers[sub] || [];
+  let key = resultData.answerKey[sub] || [];
+
+  let correct = 0;
+  let incorrect = 0;
+  let attempted = 0;
+
+  totalQuestions += answers.length;
+
+  answers.forEach((ans, i) => {
+
+    if (ans !== undefined) {
+      attempted++;
+
+      if (ans === key[i]) {
+        correct++;
+      } else {
+        incorrect++;
+      }
+    }
+  });
+
+  let skipped = answers.length - attempted;
+  let score = correct;
+
+  totalScore += score;
+  totalCorrect += correct;
+  totalIncorrect += incorrect;
+  totalAttempted += attempted;
+
+  tableHTML += `
+    <tr>
+      <td>${sub.toUpperCase()}</td>
+      <td>${answers.length}</td>
+      <td>${attempted}</td>
+      <td class="correct">${correct}</td>
+      <td class="incorrect">${incorrect}</td>
+      <td class="skipped">${skipped}</td>
+      <td>${score}</td>
+    </tr>
+  `;
+});
+
+/* TOTAL ROW */
+tableHTML += `
+<tr class="total-row">
+  <td>Total</td>
+  <td>${totalQuestions}</td>
+  <td>${totalAttempted}</td>
+  <td>${totalCorrect}</td>
+  <td>${totalIncorrect}</td>
+  <td>${totalQuestions - totalAttempted}</td>
+  <td>${totalScore}</td>
+</tr>
+`;
+
+document.getElementById("tableBody").innerHTML = tableHTML;
+
+/* SUMMARY */
+document.getElementById("score").innerText = totalScore;
+document.getElementById("attempted").innerText = totalAttempted;
+document.getElementById("correct").innerText = totalCorrect;
+document.getElementById("incorrect").innerText = totalIncorrect;
+
+</script>
+
+</body>
+</html>
