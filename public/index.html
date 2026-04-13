@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mocktest Portal</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+<div id="root">
+
+  <div class="official-header">
+    <div class="logo-emblem"></div>
+    <div class="college-info">
+      <img src="Header-1.jpeg" >
+    </div>
+  </div>
+
+  <div class="nav-strip">
+    <span class="nav-strip-title">Mocktest Portal</span>
+    <div class="nav-right">
+      <button class="contact-btn" id="contactBtn" onclick="toggleContact()">
+        Contact <span class="arrow" id="contactArrow">▼</span>
+      </button>
+
+      <div class="contact-dropdown" id="contactDropdown">
+        <div class="cd-header"><p>Get in Touch</p></div>
+
+        <a class="cd-item" href="https://www.view.edu.in/" target="_blank">
+          <div class="cd-icon web"></div>
+          <div class="cd-text">
+            <span class="cd-label">View Website</span>
+            <span class="cd-value">www.view.edu.in</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-body">
+    <div class="reg-card">
+
+      <div class="card-top">
+        <h2>Student Registration</h2>
+        <p>Fill in your details to join the Mocktest Portal</p>
+      </div>
+
+      <div class="card-body">
+        <div id="msg" class="msg"></div>
+
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="fullname" placeholder="Enter your full name">
+        </div>
+
+        <div class="field">
+          <label>Mobile Number</label>
+          <input type="tel" id="mobile" placeholder="10-digit mobile number" maxlength="10">
+        </div>
+
+        <div class="field">
+          <label>Inter College Name</label>
+          <input type="text" id="collegename" placeholder="Enter your college name">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>10th Marks Scored</label>
+            <input type="number" id="marks-scored" placeholder="e.g. 480">
+          </div>
+          <div class="field">
+            <label>Out of (Max Marks)</label>
+            <input type="number" id="marks-max" value="600">
+          </div>
+        </div>
+
+        <div class="marks-hint" id="marks-display">Enter your 10th marks above</div>
+
+        <div class="branches-group">
+          <label class="branch-title">Preferred B.Tech Branches</label>
+
+          <div class="branches-box">
+            <label><input type="checkbox" value="CSE"> CSE</label>
+            <label><input type="checkbox" value="IT"> IT</label>
+            <label><input type="checkbox" value="ECE"> ECE</label>
+            <label><input type="checkbox" value="EEE"> EEE</label>
+            <label><input type="checkbox" value="CAI"> CAI</label>
+            <label><input type="checkbox" value="CSC"> CSC</label>
+            <label><input type="checkbox" value="CSD"> CSD</label>
+            <label><input type="checkbox" value="CSM"> CSM</label>
+            <label><input type="checkbox" value="MECH"> MECH</label>
+          </div>
+        </div>
+
+        <button class="btn-main" onclick="handleRegister()" >Register Now →</button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-strip">
+    <p>© 2026 <b>Vignan's Institute of Engineering for Women (A)</b></p>
+  </div>
+
+</div>
+
+<!-- External JS -->
+<script src="login.js"></script>
+
+</body>
+</html>
