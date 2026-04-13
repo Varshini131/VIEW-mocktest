@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // ------------------ MongoDB Connection ------------------
-mongoose.connect("mongodb+srv://Varshini:vignanmocktest@cluster0.q4wwerl.mongodb.net/mocktestDB?retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
